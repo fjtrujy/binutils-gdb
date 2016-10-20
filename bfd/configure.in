@@ -508,6 +508,8 @@ for i in $selvecs ; do
 done
 selvecs="$f"
 
+# dvp is really mips, but we need to distinguish it from mips for opcodes  
+selarchs=`echo $selarchs | sed -e s/dvp/mips/g`  
 
 # uniq the associated vectors in all the configured targets.
 f=""
