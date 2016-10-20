@@ -233,6 +233,8 @@ changequote([,])dnl
       frv-*-*linux*)			fmt=elf em=linux;;
       frv-*-*)				fmt=elf ;;
 
+      dvp-*-*)				fmt=elf bfd_gas=yes install_tooldir= ;;
+
       hppa-*-linux*)	case ${cpu} in
 			    hppa*64*)	fmt=elf em=hppalinux64;;
 			    hppa*)	fmt=elf em=linux;;

@@ -65,6 +65,8 @@ static bfd_reloc_status_type mips16_jump_reloc
   (bfd *, arelent *, asymbol *, void *, asection *, bfd *, char **);
 static bfd_reloc_status_type mips16_gprel_reloc
   (bfd *, arelent *, asymbol *, void *, asection *, bfd *, char **);
+static bfd_reloc_status_type dvp_u15_s3_reloc
+  PARAMS ((bfd *, arelent *, asymbol *, PTR, asection *, bfd *, char **));
 static reloc_howto_type *bfd_elf32_bfd_reloc_type_lookup
   (bfd *, bfd_reloc_code_real_type);
 static reloc_howto_type *mips_elf_n32_rtype_to_howto
@@ -1154,6 +1156,69 @@ static reloc_howto_type elf_mips16_gprel_howto =
 	 0x07ff001f,	        /* dst_mask */
 	 FALSE);		/* pcrel_offset */
 
+/* DVP relocations.
+   Note that partial_inplace and pcrel_offset are backwards from the
+   mips port.  This is intentional as it seems more reasonable.  */
+static reloc_howto_type elf_mips_dvp_11_pcrel_howto =
+  HOWTO (R_MIPS_DVP_11_PCREL,   /* type */
+     3,                     /* rightshift */
+     2,                     /* size (0 = byte, 1 = short, 2 = long) */
+     11,                    /* bitsize */
+     TRUE,                  /* pc_relative */
+     0,                     /* bitpos */
+     complain_overflow_signed, /* complain_on_overflow */
+     bfd_elf_generic_reloc, /* special_function */
+     "R_MIPS_DVP_11_PCREL", /* name */
+     FALSE,                 /* partial_inplace */
+     0x7ff,                 /* src_mask */
+     0x7ff,                 /* dst_mask */
+     TRUE);                 /* pcrel_offset */
+
+static reloc_howto_type elf_mips_dvp_27_s4_howto =
+  HOWTO (R_MIPS_DVP_27_S4,      /* type */
+     4,                     /* rightshift */
+     2,                     /* size (0 = byte, 1 = short, 2 = long) */
+     27,                    /* bitsize */
+     FALSE,                 /* pc_relative */
+     4,                     /* bitpos */
+     complain_overflow_unsigned, /* complain_on_overflow */
+     bfd_elf_generic_reloc, /* special_function */
+     "R_MIPS_DVP_27_S4",    /* name */
+     FALSE,                 /* partial_inplace */
+     0x7ffffff0,            /* src_mask */
+     0x7ffffff0,            /* dst_mask */
+     FALSE);                /* pcrel_offset */
+
+static reloc_howto_type elf_mips_dvp_11_s4_howto =
+  HOWTO (R_MIPS_DVP_11_S4,      /* type */
+     4,                     /* rightshift */
+     2,                     /* size (0 = byte, 1 = short, 2 = long) */
+     11,                    /* bitsize */
+     FALSE,                 /* pc_relative */
+     0,                     /* bitpos */
+     complain_overflow_signed, /* complain_on_overflow */
+     bfd_elf_generic_reloc, /* special_function */
+     "R_MIPS_DVP_11_S4",    /* name */
+     FALSE,                 /* partial_inplace */
+     0x03ff,                /* src_mask */
+     0x03ff,                /* dst_mask */
+     FALSE);                /* pcrel_offset */
+
+static reloc_howto_type elf_mips_dvp_u15_s3_howto =
+  HOWTO (R_MIPS_DVP_U15_S3,     /* type */
+     3,                     /* rightshift */
+     2,                     /* size (0 = byte, 1 = short, 2 = long) */
+     15,                    /* bitsize */
+     FALSE,                 /* pc_relative */
+     0,                     /* bitpos */
+     complain_overflow_unsigned, /* complain_on_overflow */
+     dvp_u15_s3_reloc,      /* special_function */
+     "R_MIPS_DVP_U15_S3",   /* name */
+     FALSE,                 /* partial_inplace */
+     0xf03ff,               /* src_mask */
+     0xf03ff,               /* dst_mask */
+     FALSE);                /* pcrel_offset */
+
 /* GNU extension to record C++ vtable hierarchy */
 static reloc_howto_type elf_mips_gnu_vtinherit_howto =
   HOWTO (R_MIPS_GNU_VTINHERIT,	/* type */
@@ -1570,6 +1635,58 @@ mips16_gprel_reloc (bfd *abfd, arelent *reloc_entry, asymbol *symbol,
 
   return bfd_reloc_ok;
 }
+/* Handle a dvp R_MIPS_DVP_U15_S3 reloc.
+   This is needed because the bits aren't contiguous.  */
+
+static bfd_reloc_status_type
+dvp_u15_s3_reloc (abfd, reloc_entry, symbol, data, input_section,
+                  output_bfd, error_message)
+     bfd *abfd;
+     arelent *reloc_entry;
+     asymbol *symbol;
+     PTR data;
+     asection *input_section;
+     bfd *output_bfd;
+     char **error_message ATTRIBUTE_UNUSED;
+{
+  bfd_vma relocation;
+  bfd_vma x;
+
+  /* If we're relocating, and this is an external symbol with no
+     addend, we don't want to change anything.  We will only have an
+     addend if this is a newly created reloc, not read from an ELF
+     file.  See bfd_elf_generic_reloc.  */
+  if (output_bfd != NULL
+      && (symbol->flags & BSF_SECTION_SYM) == 0
+      /* partial_inplace is FALSE, so this test always succeeds,
+         but for clarity and consistency with bfd_elf_generic_reloc
+         this is left as is.  */
+      && (! reloc_entry->howto->partial_inplace
+          || reloc_entry->addend == 0))
+    {
+      reloc_entry->address += input_section->output_offset;
+      return bfd_reloc_ok;
+    }
+
+  if (reloc_entry->address > input_section->_cooked_size)
+    return bfd_reloc_outofrange;
+
+  relocation = (symbol->value
+                + symbol->section->output_section->vma
+                + symbol->section->output_offset);
+  relocation += reloc_entry->addend;
+  relocation >>= 3;
+
+  x = bfd_get_32 (abfd, (bfd_byte *) data + reloc_entry->address);
+  x |= (((relocation & 0x7800) << 10)
+        | (relocation & 0x7ff));
+  bfd_put_32 (abfd, x, (bfd_byte *) data + reloc_entry->address);
+
+  if (relocation & ~(bfd_vma) 0x7fff)
+    return bfd_reloc_overflow;
+  return bfd_reloc_ok;
+}
+
 
 /* A mapping from BFD reloc types to MIPS ELF reloc types.  */
 
@@ -1641,6 +1758,14 @@ bfd_elf32_bfd_reloc_type_lookup (bfd *abfd ATTRIBUTE_UNUSED,
       return &elf_mips16_jump_howto;
     case BFD_RELOC_MIPS16_GPREL:
       return &elf_mips16_gprel_howto;
+    case BFD_RELOC_MIPS_DVP_11_PCREL:
+      return &elf_mips_dvp_11_pcrel_howto;
+    case BFD_RELOC_MIPS_DVP_27_S4:
+      return &elf_mips_dvp_27_s4_howto;
+    case BFD_RELOC_MIPS_DVP_11_S4:
+      return &elf_mips_dvp_11_s4_howto;
+    case BFD_RELOC_MIPS_DVP_U15_S3:
+      return &elf_mips_dvp_u15_s3_howto;
     case BFD_RELOC_VTABLE_INHERIT:
       return &elf_mips_gnu_vtinherit_howto;
     case BFD_RELOC_VTABLE_ENTRY:

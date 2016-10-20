@@ -1548,6 +1548,11 @@ enum bfd_architecture
 #define bfd_mach_mipsisa32r2           33
 #define bfd_mach_mipsisa64             64
 #define bfd_mach_mipsisa64r2           65
+#define bfd_mach_dvp_dma               42000
+#define bfd_mach_dvp_vif               42001
+#define bfd_mach_dvp_vu                42002
+#define bfd_mach_dvp_gif               42003
+#define bfd_mach_dvp_p(mach) ((mach) >= 42000 && (mach) <= 42003)
   bfd_arch_i386,      /* Intel 386 */
 #define bfd_mach_i386_i386 1
 #define bfd_mach_i386_i8086 2
@@ -2359,6 +2364,21 @@ in the instruction.  */
 /* Adjust by program base.  */
   BFD_RELOC_MN10300_RELATIVE,
 
+/* MIPS DVP Relocations. 
+This is an 11-bit pc relative reloc.  The recorded address is for the 
+lower instruction word, and the value is in 128 bit units.  */
+  BFD_RELOC_MIPS_DVP_11_PCREL,
+
+/* This is a 27 bit address left shifted by 4.  */
+  BFD_RELOC_MIPS_DVP_27_S4,
+
+/* This is the 11 bit offset operand of ilw/stw instructions 
+left shifted by 4.  */
+  BFD_RELOC_MIPS_DVP_11_S4,
+
+/* This is the 15 bit unsigned immediate operand of the iaddiu instruction 
+left shifted by 3.  */
+  BFD_RELOC_MIPS_DVP_U15_S3,
 
 /* i386/elf relocations  */
   BFD_RELOC_386_GOT32,

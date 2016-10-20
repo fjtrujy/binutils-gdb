@@ -1164,6 +1164,19 @@ _print_insn_mips (memaddr, info, endianness)
   bfd_byte buffer[INSNLEN];
   int status;
 
+#ifdef ARCH_dvp  
+  {
+    /* bfd_mach_dvp_p is a macro which may evaluate its arguments more than  
+       once.  Since dvp_mach_type is a function, ensure it's only called  
+       once.  */
+    int mach = dvp_info_mach_type (info);
+
+    if (bfd_mach_dvp_p (info->mach)
+        || bfd_mach_dvp_p (mach))
+      return print_insn_dvp (memaddr, info);
+  }
+#endif  
+
   set_default_mips_dis_options (info);
   parse_mips_dis_options (info->disassembler_options);
 

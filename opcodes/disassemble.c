@@ -235,12 +235,16 @@ disassembler (abfd)
       disassemble = print_insn_mcore;
       break;
 #endif
-#ifdef ARCH_mips
+#if defined(ARCH_mips) || defined(ARCH_dvp)
     case bfd_arch_mips:
+#ifdef ARCH_mips
       if (bfd_big_endian (abfd))
 	disassemble = print_insn_big_mips;
       else
 	disassemble = print_insn_little_mips;
+#else
+	disassemble = print_insn_dvp;
+#endif
       break;
 #endif
 #ifdef ARCH_mmix
