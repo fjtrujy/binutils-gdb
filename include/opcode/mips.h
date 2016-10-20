@@ -199,6 +199,24 @@ Software Foundation, 51 Franklin Street - Fifth Floor, Boston, MA 02110-1301, US
 #define	OP_OP_SDC2		0x3e
 #define	OP_OP_SDC3		0x3f	/* a.k.a. sd */
 
+/* r5900's VU additional features */
+#define OP_SH_VADDI             6 
+#define OP_MASK_VADDI           0x1f 
+#define OP_SH_VUTREG            16 
+#define OP_MASK_VUTREG          0x1f 
+#define OP_SH_VUSREG            11 
+#define OP_MASK_VUSREG          0x1f 
+#define OP_SH_VUDREG            6 
+#define OP_MASK_VUDREG          0x1f 
+#define OP_SH_VUFSF             21 
+#define OP_MASK_VUFSF           0x3 
+#define OP_SH_VUFTF             23 
+#define OP_MASK_VUFTF           0x3 
+#define OP_SH_VUDEST            21 
+#define OP_MASK_VUDEST          0xf 
+#define OP_SH_VUCALLMS          6 
+#define OP_MASK_VUCALLMS        0x7fff 
+
 /* Values in the 'VSEL' field.  */
 #define MDMX_FMTSEL_IMM_QH	0x1d
 #define MDMX_FMTSEL_IMM_OB	0x1e
@@ -332,8 +350,27 @@ struct mips_opcode
    "e" 5 bit vector register byte specifier (OP_*_VECBYTE)
    "%" 3 bit immediate vr5400 vector alignment operand (OP_*_VECALIGN)
    see also "k" above
-   "+D" Combined destination register ("G") and sel ("H") for CP0 ops,
+   "*D" Combined destination register ("G") and sel ("H") for CP0 ops,
 	for pretty-printing in disassembly only.
+   "0" vu0 immediate for viaddi (OP_*_VADDI) 
+   "1" vu0 fp reg position 1 (OP_*_VUTREG) 
+   "2" vu0 fp reg position 2 (OP_*_VUSREG) 
+   "3" vu0 fp reg position 3 (OP_*_VUDREG) 
+   "4" vu0 int reg position 1 (OP_*_VUTREG) 
+   "5" vu0 int reg position 2 (OP_*_VUSREG) 
+   "6" vu0 int reg position 3 (OP_*_VURREG) 
+   "7" vu0 fp reg with ftf modifier (OP_*_VUTREG and OP_*_VUFTF) 
+   "8" vu0 fp reg with fsf modifier (OP_*_VUSREG and OP_*_VUFSF) 
+   "9" vi27 for vcallmsr 
+   "#" optional suffix that must match if present 
+   "=" dest operant completer, must match previous dest if present 
+   "&" dest instruction completer (OP_*_VUDEST) 
+   ";" dest instruction completer, must by xyz 
+   "!" vu0 I register 
+   "^" vu0 Q register 
+   "_" vu0 R register 
+   "@" vu0 ACC register 
+   "g" Immediate operand for vcallms instruction. (OP_*_VUCALLMS) 
 
    Macro instructions:
    "A" General 32 bit expression
@@ -399,7 +436,8 @@ struct mips_opcode
    "()" parens surrounding optional value
    ","  separates operands
    "[]" brackets around index for vector-op scalar operand specifier (vr5400)
-   "+"  Start of extension sequence.
+   "+-" auto inc/dec decorators
+   "*"  Start of extension sequence.
 
    Characters used so far, for quick reference when adding more:
    "1234567890"
@@ -407,7 +445,7 @@ struct mips_opcode
    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
    "abcdefghijklopqrstuvwxz"
 
-   Extension character sequences used so far ("+" followed by the
+   Extension character sequences used so far ("*" followed by the
    following), for quick reference when adding more:
    "1234"
    "ABCDEFGHIPQSTX"
