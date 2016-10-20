@@ -1015,6 +1015,7 @@ resolve_symbol_value (symbolS *symp)
 	      goto exit_dont_set_value;
 	    }
 	  else if (finalize_syms && final_seg == expr_section
+		   && seg_left != absolute_section
 		   && seg_left != expr_section)
 	    {
 	      /* If the symbol is an expression symbol, do similarly
