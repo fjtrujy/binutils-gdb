@@ -150,6 +150,8 @@ case ${generic_target} in
   frv-*-*linux*)			fmt=elf em=linux;;
   frv-*-*)				fmt=elf ;;
 
+  dvp-*-*)				fmt=elf bfd_gas=yes ;;
+
   moxie-*-uclinux)                      fmt=elf em=linux;;
   moxie-*-*)                            fmt=elf ;;
 
