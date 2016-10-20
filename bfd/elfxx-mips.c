@@ -4436,6 +4436,15 @@ _bfd_mips_elf_section_from_shdr (abfd, hdr, name)
 		      sizeof ".MIPS.post_rel" - 1) != 0)
 	return FALSE;
       break;
+    case SHT_DVP_OVERLAY_TABLE:
+      if (strcmp (name, SHNAME_DVP_OVERLAY_TABLE) !=0)
+        return FALSE;
+      break;
+    case SHT_DVP_OVERLAY:
+      if (strncmp (name, SHNAME_DVP_OVERLAY_PREFIX,
+                   sizeof (SHNAME_DVP_OVERLAY_PREFIX) - 1) !=0)
+        return FALSE;
+      break;
     default:
       return FALSE;
     }
@@ -4639,6 +4648,17 @@ _bfd_mips_elf_fake_sections (abfd, hdr, sec)
       hdr->sh_flags |= SHF_ALLOC;
       hdr->sh_entsize = 8;
     }
+  else if (strcmp (name, SHNAME_DVP_OVERLAY_TABLE) == 0)
+    {
+      hdr->sh_type = SHT_DVP_OVERLAY_TABLE;
+      hdr->sh_entsize = sizeof (Elf32_Dvp_External_Overlay);
+      /* The sh_link field is set in final_write_processing.  */
+    }
+  else if (strcmp (name, SHNAME_DVP_OVERLAY_STRTAB) == 0)
+    hdr->sh_type = SHT_STRTAB;
+  else if (strncmp (name, SHNAME_DVP_OVERLAY_PREFIX,
+                    sizeof (SHNAME_DVP_OVERLAY_PREFIX) - 1) == 0)
+    hdr->sh_type = SHT_DVP_OVERLAY;
 
   /* The generic elf_fake_sections will set up REL_HDR using the
      default kind of relocations.  But, we may actually need both
@@ -9276,7 +9296,7 @@ _bfd_mips_elf_merge_private_bfd_data (ibfd, obfd)
     {
       (*_bfd_error_handler)
 	(_("%s: linking 32-bit code with 64-bit code"),
-	 bfd_archive_filename (ibfd));
+	 bfd_archive_filename (ibfd), old_flags, new_flags);
       ok = FALSE;
     }
   else if (!mips_mach_extends_p (bfd_get_mach (ibfd), bfd_get_mach (obfd)))

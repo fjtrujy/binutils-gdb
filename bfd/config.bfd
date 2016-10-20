@@ -63,6 +63,9 @@ z8k*)	         targ_archs=bfd_z8k_arch ;;
 *)	         targ_archs=bfd_${targ_cpu}_arch ;;
 esac
 
+case "${targ}" in 
+  mips64*-scei*-elf*) targ_archs="${targ_archs} bfd_dvp_arch" ;; 
+esac 
 
 # WHEN ADDING ENTRIES TO THIS MATRIX:
 #  Make sure that the left side always has two dashes.  Otherwise you
@@ -323,6 +326,10 @@ case "${targ}" in
     targ_defvec=bfd_elf32_frv_vec
     ;;
 
+  dvp-*-*)
+    targ_defvec=bfd_elf32_littlemips_vec
+    targ_selvecs="bfd_elf64_littlemips_vec"
+    ;;
 
   h8300*-*-elf)
     targ_defvec=bfd_elf32_h8300_vec
