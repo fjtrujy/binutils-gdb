@@ -631,6 +631,9 @@ case "${target}" in
   d30v-*-*)
     noconfigdirs="$noconfigdirs ${libgcj} gdb"
     ;;
+  dvp-*-*)
+    noconfigdirs="$noconfigdirs ld"
+    ;;
   ep9312-*-elf | ep9312-*-coff)
     libgloss_dir=arm
     ;;

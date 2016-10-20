@@ -208,7 +208,7 @@ static int dwarf_file_string;
 #endif
 #endif
 
-static void do_s_func (int end_p, const char *default_prefix);
+void do_s_func (int end_p, const char *default_prefix);
 static void do_align (int, char *, int, int);
 static void s_align (int, int);
 static void s_altmacro (int);
@@ -5650,7 +5650,7 @@ s_func (int end_p)
 /* Subroutine of s_func so targets can choose a different default prefix.
    If DEFAULT_PREFIX is NULL, use the target's "leading char".  */
 
-static void
+void
 do_s_func (int end_p, const char *default_prefix)
 {
   /* Record the current function so that we can issue an error message for
