@@ -15,3 +15,8 @@ unset DATA_ADDR
 SHLIB_TEXT_START_ADDR=0
 unset GENERATE_SHLIB_SCRIPT
 
+OTHER_SYMBOLS='
+  PROVIDE(_heap_size = -1);
+  PROVIDE(_stack = -1);
+  PROVIDE(_stack_size = 128 * 1024);
+'
