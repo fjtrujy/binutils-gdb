@@ -1945,6 +1945,7 @@ const struct mips_opcode mips_builtin_opcodes[] =
 {"sqc2",		"+7,o(b)",	0xf8000000, 0xfc000000,	RD_3|RD_C2|SM,		0,		EE,		0,	0 },
 {"sqc2",		"+7,A(b)",	0,    (int) M_SQC2_AB,	INSN_MACRO,		0,		EE,		0,	0 },
 {"sqrt.d",		"D,S",		0x46200004, 0xffff003f, WR_1|RD_2|FP_D,		0,		I2,		0,	SF },
+{"sqrt.s",		"D,T",      0x46000004, 0xffe0f83f, WR_1|RD_2|FP_S,		0,		EE,		0,	0 },
 {"sqrt.s",		"D,S",		0x46000004, 0xffff003f, WR_1|RD_2|FP_S,		0,		I2,		0,	0 },
 {"sqrt.ps",		"D,S",		0x46c00004, 0xffff003f, WR_1|RD_2|FP_D,		0,		SB1,		0,	0 },
 {"srav",		"d,t,s",	0x00000007, 0xfc0007ff,	WR_1|RD_2|RD_3,		0,		I1,		0,	0 },
