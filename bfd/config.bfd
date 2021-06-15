@@ -1133,6 +1133,10 @@ case "${targ}" in
     targ_selvecs="mips_elf32_le_vec mips_ecoff_be_vec mips_ecoff_le_vec"
     ;;
 #endif
+  mips*-*-irx*)
+    targ_defvec=mips_elf32_le_vec
+    targ_selvecs="mips_elf32_be_vec"
+    ;;
   mips*-sgi-* | mips*-*-bsd*)
     targ_defvec=mips_ecoff_be_vec
     targ_selvecs=mips_ecoff_le_vec
