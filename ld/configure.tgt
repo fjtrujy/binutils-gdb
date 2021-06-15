@@ -523,6 +523,10 @@ mips*el-*-elf*)		targ_emul=elf32elmip
 mips*-*-elf* | mips*-*-rtems*)
 			targ_emul=elf32ebmip
 			;;
+mips*el-*-irx*)		targ_emul=mipsirx
+			targ_extra_emuls="elf32elmip"
+			targ_extra_libpath=$targ_extra_emuls
+			;;
 mips*el-*-vxworks*)	targ_emul=elf32elmipvxworks
 			targ_extra_emuls="elf32ebmipvxworks"
 			;;

@@ -2986,7 +2986,7 @@ _bfd_elf_make_section_from_phdr (bfd *abfd,
       newsect->filepos = hdr->p_offset;
       newsect->flags |= SEC_HAS_CONTENTS;
       newsect->alignment_power = bfd_log2 (hdr->p_align);
-      if (hdr->p_type == PT_LOAD)
+      if (hdr->p_type == PT_LOAD || hdr->p_type == PT_MIPS_IRXHDR)
 	{
 	  newsect->flags |= SEC_ALLOC;
 	  newsect->flags |= SEC_LOAD;
@@ -3024,7 +3024,7 @@ _bfd_elf_make_section_from_phdr (bfd *abfd,
       if (align == 0 || align > hdr->p_align)
 	align = hdr->p_align;
       newsect->alignment_power = bfd_log2 (align);
-      if (hdr->p_type == PT_LOAD)
+      if (hdr->p_type == PT_LOAD || hdr->p_type == PT_MIPS_IRXHDR)
 	{
 	  /* Hack for gdb.  Segments that have not been modified do
 	     not have their contents written to a core file, on the
@@ -5580,7 +5580,7 @@ assign_file_positions_for_load_sections (bfd *abfd,
       else
 	p->p_paddr = (m->sections[0]->lma + m->p_vaddr_offset) * opb;
 
-      if (p->p_type == PT_LOAD
+      if ((p->p_type == PT_LOAD || p->p_type == PT_MIPS_IRXHDR)
 	  && (abfd->flags & D_PAGED) != 0)
 	{
 	  /* p_align in demand paged PT_LOAD segments effectively stores
@@ -5610,7 +5610,7 @@ assign_file_positions_for_load_sections (bfd *abfd,
 
       no_contents = FALSE;
       off_adjust = 0;
-      if (p->p_type == PT_LOAD
+      if ((p->p_type == PT_LOAD || p->p_type == PT_MIPS_IRXHDR)
 	  && m->count > 0)
 	{
 	  bfd_size_type align;  /* Bytes.  */
@@ -5764,7 +5764,7 @@ assign_file_positions_for_load_sections (bfd *abfd,
 	    }
 	}
 
-      if (p->p_type == PT_LOAD
+      if ((p->p_type == PT_LOAD || p->p_type == PT_MIPS_IRXHDR)
 	  || (p->p_type == PT_NOTE && bfd_get_format (abfd) == bfd_core))
 	{
 	  if (!m->includes_filehdr && !m->includes_phdrs)
@@ -5810,6 +5810,7 @@ assign_file_positions_for_load_sections (bfd *abfd,
 	  align = (bfd_size_type) 1 << bfd_section_alignment (sec);
 
 	  if ((p->p_type == PT_LOAD
+		   || p->p_type == PT_MIPS_IRXHDR
 	       || p->p_type == PT_TLS)
 	      && (this_hdr->sh_type != SHT_NOBITS
 		  || ((this_hdr->sh_flags & SHF_ALLOC) != 0
@@ -5893,7 +5894,7 @@ assign_file_positions_for_load_sections (bfd *abfd,
 	    }
 	  else
 	    {
-	      if (p->p_type == PT_LOAD)
+	      if (p->p_type == PT_LOAD || p->p_type == PT_MIPS_IRXHDR)
 		{
 		  this_hdr->sh_offset = sec->filepos = off;
 		  if (this_hdr->sh_type != SHT_NOBITS)
@@ -5937,7 +5938,7 @@ assign_file_positions_for_load_sections (bfd *abfd,
 
 	      if (align > p->p_align
 		  && !m->p_align_valid
-		  && (p->p_type != PT_LOAD
+		  && ((p->p_type != PT_LOAD && p->p_type != PT_MIPS_IRXHDR)
 		      || (abfd->flags & D_PAGED) == 0))
 		p->p_align = align;
 	    }
@@ -5976,7 +5977,8 @@ assign_file_positions_for_load_sections (bfd *abfd,
 
       /* Check that all sections are in a PT_LOAD segment.
 	 Don't check funky gdb generated core files.  */
-      if (p->p_type == PT_LOAD && bfd_get_format (abfd) != bfd_core)
+      if ((p->p_type == PT_LOAD || p->p_type == PT_MIPS_IRXHDR)
+		  && bfd_get_format (abfd) != bfd_core)
 	{
 	  bfd_boolean check_vma = TRUE;
 
@@ -6214,7 +6216,7 @@ assign_file_positions_for_non_load_sections (bfd *abfd,
 		   lm != NULL;
 		   lm = lm->next, lp++)
 		{
-		  if (lp->p_type == PT_LOAD
+		  if ((lp->p_type == PT_LOAD || lp->p_type == PT_MIPS_IRXHDR)
 		      && lm->count != 0
 		      && (lm->sections[lm->count - 1]->vma
 			  + (!IS_TBSS (lm->sections[lm->count - 1])
@@ -6280,8 +6282,7 @@ assign_file_positions_for_non_load_sections (bfd *abfd,
       else if (m->count != 0)
 	{
 	  unsigned int i;
-
-	  if (p->p_type != PT_LOAD
+	  if ((p->p_type != PT_LOAD && p->p_type != PT_MIPS_IRXHDR)
 	      && (p->p_type != PT_NOTE
 		  || bfd_get_format (abfd) != bfd_core))
 	    {

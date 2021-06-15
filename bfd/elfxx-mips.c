@@ -7420,6 +7420,10 @@ _bfd_mips_elf_section_from_shdr (bfd *abfd,
      probably get away with this.  */
   switch (hdr->sh_type)
     {
+    case SHT_IOPMOD:
+      if (strcmp(name, ".iopmod") != 0)
+	return FALSE;
+      break;
     case SHT_MIPS_LIBLIST:
       if (strcmp (name, ".liblist") != 0)
 	return FALSE;
@@ -7608,7 +7612,27 @@ _bfd_mips_elf_fake_sections (bfd *abfd, Elf_Internal_Shdr *hdr, asection *sec)
 {
   const char *name = bfd_section_name (sec);
 
-  if (strcmp (name, ".liblist") == 0)
+  if (strcmp(name, ".iopmod") == 0)
+   {
+      /* Verify that this bfd is going to be an IRX, and not an object
+	     file or a rogue elf with an .iopmod section by looking for
+	     the PT_MIPS_IRXHDR program header.  */
+	  struct elf_segment_map *m;
+
+	  for (m = elf_seg_map(abfd); m != NULL; m = m->next)
+	  {
+		if (m->p_type == PT_MIPS_IRXHDR)
+	    {
+		  /* Mark the file as an IRX.  */
+		  elf_elfheader(abfd)->e_type = ET_IRX;
+		  /* Setup the section type and flags.  */
+		  hdr->sh_type = SHT_IOPMOD;
+		  hdr->sh_addr = 0;
+		  hdr->sh_flags &= ~(SHF_ALLOC | SHF_WRITE | SHF_EXECINSTR);
+	    }
+	  }
+    }
+  else if (strcmp (name, ".liblist") == 0)
     {
       hdr->sh_type = SHT_MIPS_LIBLIST;
       hdr->sh_info = sec->size / sizeof (Elf32_Lib);

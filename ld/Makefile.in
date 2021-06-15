@@ -808,6 +808,7 @@ ALL_EMULATION_SOURCES = \
 	em68kelfnbsd.c \
 	em9s12zelf.c \
 	emcorepe.c \
+	emipsirx.c \
 	emn10200.c \
 	emn10300.c \
 	emsp430elf.c \
@@ -1421,6 +1422,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/em68kelfnbsd.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/em9s12zelf.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/emcorepe.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/emipsirx.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/emmo.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/emn10200.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/emn10300.Po@am__quote@
@@ -2533,6 +2535,9 @@ $(ALL_EMULATION_SOURCES) $(ALL_64_EMULATION_SOURCES): $(GEN_DEPENDS)
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ei386pep.Pc@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/emmo.Pc@am__quote@
 
+
+emipsirx.c:  $(srcdir)/emulparams/mipsirx.sh $(ELF_DEPS) \
+  $(srcdir)/emultempl/irx.em $(srcdir)/scripttempl/irx.sc ${GEN_DEPENDS}
 check-DEJAGNU: site.exp
 	srcroot=`cd $(srcdir) && pwd`; export srcroot; \
 	r=`pwd`; export r; \

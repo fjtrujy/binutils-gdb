@@ -11230,6 +11230,15 @@ elf_link_input_bfd (struct elf_final_link_info *flinfo, bfd *input_bfd)
 
 		  last_offset = irela->r_offset;
 
+		  /* IRX modules need the relocations, but symbols may be stripped. */
+		  if (elf_elfheader(output_bfd)->e_type == ET_IRX
+		    && flinfo->info->strip == strip_all)
+		  {
+		    irela->r_info = ELF32_R_INFO(STN_UNDEF, ELF32_R_TYPE(irela->r_info));
+		    *rel_hash = NULL;
+		    continue;
+		  }
+
 		  r_symndx = irela->r_info >> r_sym_shift;
 		  if (r_symndx == STN_UNDEF)
 		    continue;

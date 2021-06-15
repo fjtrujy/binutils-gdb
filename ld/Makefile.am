@@ -325,6 +325,7 @@ ALL_EMULATION_SOURCES = \
 	em68kelfnbsd.c \
 	em9s12zelf.c \
 	emcorepe.c \
+	emipsirx.c \
 	emn10200.c \
 	emn10300.c \
 	emsp430elf.c \
@@ -938,6 +939,9 @@ $(ALL_EMULATION_SOURCES) $(ALL_64_EMULATION_SOURCES): $(GEN_DEPENDS)
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ei386pep.Pc@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/emmo.Pc@am__quote@
 
+
+emipsirx.c:  $(srcdir)/emulparams/mipsirx.sh $(ELF_DEPS) \
+  $(srcdir)/emultempl/irx.em $(srcdir)/scripttempl/irx.sc ${GEN_DEPENDS}
 # We need this for automake to use YLWRAP.
 EXTRA_ld_new_SOURCES = deffilep.y ldlex.l
 # Allow dependency tracking to work for these files, too.

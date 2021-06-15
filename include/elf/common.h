@@ -98,6 +98,7 @@
 #define ET_LOOS		0xFE00	/* Operating system-specific */
 #define ET_HIOS		0xFEFF	/* Operating system-specific */
 #define ET_LOPROC	0xFF00	/* Processor-specific */
+#define ET_IRX		0xFF80  /* SONY IRX file */
 #define ET_HIPROC	0xFFFF	/* Processor-specific */
 
 /* Values for e_machine, which identifies the architecture.  These numbers
@@ -464,6 +465,7 @@
 #define PT_LOOS		0x60000000	/* OS-specific */
 #define PT_HIOS		0x6fffffff	/* OS-specific */
 #define PT_LOPROC	0x70000000	/* Processor-specific */
+#define PT_MIPS_IRXHDR	0x70000080	/* SONY IRX loadable program segment */
 #define PT_HIPROC	0x7FFFFFFF	/* Processor-specific */
 
 #define PT_GNU_EH_FRAME	(PT_LOOS + 0x474e550) /* Frame unwind information */
@@ -527,6 +529,7 @@
 #define SHT_GNU_versym	SHT_SUNW_versym
 
 #define SHT_LOPROC	0x70000000	/* Processor-specific semantics, lo */
+#define SHT_IOPMOD	0x70000080	/* SONY IRX .iopmod section */
 #define SHT_HIPROC	0x7FFFFFFF	/* Processor-specific semantics, hi */
 #define SHT_LOUSER	0x80000000	/* Application-specific semantics */
 /* #define SHT_HIUSER	0x8FFFFFFF    *//* Application-specific semantics */
