@@ -1261,6 +1261,19 @@ print_insn_mips (bfd_vma memaddr,
   return INSNLEN;
 }
 
+#ifdef ARCH_dvp  
+  {
+    /* bfd_mach_dvp_p is a macro which may evaluate its arguments more than  
+       once.  Since dvp_mach_type is a function, ensure it's only called  
+       once.  */
+    int mach = dvp_info_mach_type (info);
+
+    if (bfd_mach_dvp_p (info->mach)
+        || bfd_mach_dvp_p (mach))
+      return print_insn_dvp (memaddr, info);
+  }
+#endif  
+
 /* Disassemble an operand for a mips16 instruction.  */
 
 static void

@@ -278,7 +278,7 @@ case $basic_machine in
 	| sparc | sparc64 | sparc64b | sparc86x | sparclet | sparclite \
 	| sparcv8 | sparcv9 | sparcv9b \
 	| strongarm \
-	| tahoe | thumb | tic4x | tic80 | tron \
+	| tahoe | thumb | tic4x | tic80 | tron | dvp \
 	| v850 | v850e \
 	| we32k \
 	| x86 | xscale | xscalee[bl] | xstormy16 | xtensa \
@@ -689,6 +689,10 @@ case $basic_machine in
 	*mint | -mint[0-9]* | *MiNT | *MiNT[0-9]*)
 		basic_machine=m68k-atari
 		os=-mint
+		;;
+	dvp)
+		basic_machine=dvp-scei
+		os=-elf
 		;;
 	mips3*-*)
 		basic_machine=`echo $basic_machine | sed -e 's/mips3/mips64/'`

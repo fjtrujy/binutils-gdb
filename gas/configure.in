@@ -297,6 +297,10 @@ changequote([,])dnl
       frv)
 	using_cgen=yes
 	;;
+
+      dvp)				
+  using_cgen=yes
+  ;;
       m68k)
 	case ${extra_objects} in
 	*m68k-parse.o*) ;;
