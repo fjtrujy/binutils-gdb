@@ -1016,7 +1016,7 @@ const struct mips_opcode mips_builtin_opcodes[] =
 {"cvt.s.pl",		"D,S",		0x46c00028, 0xffff003f,	WR_1|RD_2|FP_S|FP_D,	0,		I5_33,		0,	0 },
 {"cvt.s.pu",		"D,S",		0x46c00020, 0xffff003f,	WR_1|RD_2|FP_S|FP_D,	0,		I5_33,		0,	0 },
 {"cvt.w.d",		"D,S",		0x46200024, 0xffff003f,	WR_1|RD_2|FP_S|FP_D,	0,		I1,		0,	SF },
-{"cvt.w.s",		"D,S",		0x46000024, 0xffff003f,	WR_1|RD_2|FP_S,		0,		I1,		0,	EE },
+{"cvt.w.s",		"D,S",		0x46000024, 0xffff003f,	WR_1|RD_2|FP_S,		0,		I1,		0,	0 },
 {"cvt.ps.pw",		"D,S",		0x46800026, 0xffff003f,	WR_1|RD_2|FP_S|FP_D,	0,		0,		M3D,	0 },
 {"cvt.ps.s",		"D,V,T",	0x46000026, 0xffe0003f,	WR_1|RD_2|RD_3|FP_S|FP_D, 0,		I5_33,		0,	I37 },
 {"cvt.pw.ps",		"D,S",		0x46c00024, 0xffff003f,	WR_1|RD_2|FP_S|FP_D,	0,		0,		M3D,	0 },
