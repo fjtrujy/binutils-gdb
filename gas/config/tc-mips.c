@@ -2955,8 +2955,10 @@ struct regname {
     {"NS",	RTYPE_VFPU_CTR |  15}, \
     {"ns",	RTYPE_VFPU_CTR |  15}, \
     /* VFPU sv.q write back suffix */  \
-    {"WB",	RTYPE_VFPU_CTR |  16}, \
-    {"wb",	RTYPE_VFPU_CTR |  16}, \
+    {"WT",	RTYPE_VFPU_CTR |  16}, \
+    {"wt",	RTYPE_VFPU_CTR |  16}, \
+    {"WB",	RTYPE_VFPU_CTR |  17}, \
+    {"wb",	RTYPE_VFPU_CTR |  17}, \
     /* VFPU magic constants */         \
     {"VFPU_HUGE",      RTYPE_VFPU_CTR | 33}, \
     {"VFPU_SQRT2",     RTYPE_VFPU_CTR | 34}, \
@@ -9077,12 +9079,12 @@ match_vfpu_operand (struct mips_arg_info *arg,
     if (!match_reg (arg, OP_REG_VFPU_CTR, &uval))
       return false;
 
-    if (uval != 16) {
-      set_insn_error (arg->argnum, _("invalid sv.q suffix, only 'wb' suffix is allowed"));
+    if (uval != 16 && uval != 17) {
+      set_insn_error (arg->argnum, _("invalid sv.q suffix, only 'wb' and 'wt' suffixes are allowed"));
       return false;
     }
 
-    insn_insert_operand (arg->insn, operand, 1);
+    insn_insert_operand (arg->insn, operand, uval & 1);
     return true;
 
   };
