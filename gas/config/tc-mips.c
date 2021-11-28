@@ -5359,7 +5359,7 @@ mips_parse_vfpu_prefix (char *s, unsigned int *channel)
   }
   SKIP_SPACE_TABS (s);
 
-  if (*s == 'm') {
+  if (*s == 'm' || *s == 'M') {
     PFX_RET(PFX_DEST | PFX_MSK, 1);    // Masked entry
   }
   else if (!strncmp(s, "0:1", 3)) {
@@ -5415,10 +5415,10 @@ mips_parse_vfpu_prefix (char *s, unsigned int *channel)
     SKIP_SPACE_TABS (s);
 
     switch (*s++) {
-      case 'x': var = PFX_SWZ | PFX_X; break;
-      case 'y': var = PFX_SWZ | PFX_Y; break;
-      case 'z': var = PFX_SWZ | PFX_Z; break;
-      case 'w': var = PFX_SWZ | PFX_W; break;
+      case 'x': case 'X': var = PFX_SWZ | PFX_X; break;
+      case 'y': case 'Y': var = PFX_SWZ | PFX_Y; break;
+      case 'z': case 'Z': var = PFX_SWZ | PFX_Z; break;
+      case 'w': case 'W': var = PFX_SWZ | PFX_W; break;
       default:
         set_insn_error (0, _("invalid VFPU prefix"));
         return NULL;
