@@ -61,6 +61,11 @@
 # define DIAGNOSTIC_IGNORE_FORMAT_NONLITERAL \
   DIAGNOSTIC_IGNORE ("-Wformat-nonliteral")
 
+# if __has_warning ("-Wenum-constexpr-conversion")
+#  define DIAGNOSTIC_IGNORE_ENUM_CONSTEXPR_CONVERSION \
+   DIAGNOSTIC_IGNORE ("-Wenum-constexpr-conversion")
+# endif
+
 #elif defined (__GNUC__) /* GCC */
 
 # define DIAGNOSTIC_IGNORE_STRINGOP_TRUNCATION \
@@ -94,5 +99,9 @@
 #ifndef DIAGNOSTIC_IGNORE_FORMAT_NONLITERAL
 # define DIAGNOSTIC_IGNORE_FORMAT_NONLITERAL
 #endif
+#endif
+
+#ifndef DIAGNOSTIC_IGNORE_ENUM_CONSTEXPR_CONVERSION
+# define DIAGNOSTIC_IGNORE_ENUM_CONSTEXPR_CONVERSION
 
 #endif /* DIAGNOSTICS_H */
