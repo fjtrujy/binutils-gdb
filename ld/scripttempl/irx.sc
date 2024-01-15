@@ -14,6 +14,28 @@ else
   test -z "$DATA_ADDR" && DATA_ADDR=0x10000000
 fi
 
+CTOR=".ctors ${CONSTRUCTING-0} :
+  {
+    ${CONSTRUCTING+${CTOR_START}}
+    ${RELOCATING+LONG (0xffffffff) ;}
+    KEEP (*crtbegin.o(.ctors))
+    KEEP (*(EXCLUDE_FILE (*crtend.o) .ctors))
+    KEEP (*(SORT(.ctors.*)))
+    KEEP (*(.ctors))
+    ${CONSTRUCTING+${CTOR_END}}
+  }"
+
+DTOR=" .dtors       ${CONSTRUCTING-0} :
+  {
+    ${CONSTRUCTING+${DTOR_START}}
+    ${RELOCATING+LONG (0xffffffff) ;}
+    KEEP (*crtbegin.o(.dtors))
+    KEEP (*(EXCLUDE_FILE (*crtend.o) .dtors))
+    KEEP (*(SORT(.dtors.*)))
+    KEEP (*(.dtors))
+    ${CONSTRUCTING+${DTOR_END}}
+  }"
+
 # These variables are used to put braces in parameter expansions so that
 # they expand properly.
 LBRACE="{"
@@ -77,6 +99,18 @@ SECTIONS
     * ( .data.* )
     ${CONSTRUCTING+CONSTRUCTORS}
   }
+
+  ${RELOCATING+PROVIDE (__CTOR_LIST__ = .);}
+  ${RELOCATING+PROVIDE (___CTOR_LIST__ = .);}
+  ${RELOCATING+${CTOR}}
+  ${RELOCATING+PROVIDE (__CTOR_END__ = .);}
+  ${RELOCATING+PROVIDE (___CTOR_END__ = .);}
+
+  ${RELOCATING+PROVIDE (__DTOR_LIST__ = .);}
+  ${RELOCATING+PROVIDE (___DTOR_LIST__ = .);}
+  ${RELOCATING+${DTOR}}
+  ${RELOCATING+PROVIDE (__DTOR_END__ = .);}
+  ${RELOCATING+PROVIDE (___DTOR_END__ = .);}
 
   ${RELOCATING+. = ALIGN(16) ;}
   ${RELOCATING+_gp = . + 0x8000 ;}
