@@ -141,6 +141,7 @@ TARGET_CPU_CFILES = \
 	config/tc-d10v.c \
 	config/tc-d30v.c \
 	config/tc-dlx.c \
+	config/tc-dvp.c \
 	config/tc-epiphany.c \
 	config/tc-fr30.c \
 	config/tc-frv.c \
@@ -215,6 +216,7 @@ TARGET_CPU_HFILES = \
 	config/tc-d10v.h \
 	config/tc-d30v.h \
 	config/tc-dlx.h \
+	config/tc-dvp.h \
 	config/tc-epiphany.h \
 	config/tc-fr30.h \
 	config/tc-frv.h \
