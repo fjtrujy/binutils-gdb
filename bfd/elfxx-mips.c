@@ -7551,6 +7551,16 @@ _bfd_mips_elf_section_from_shdr (bfd *abfd,
     case SHT_MIPS_XHASH:
       if (strcmp (name, ".MIPS.xhash") != 0)
 	return false;
+      break;
+    case SHT_DVP_OVERLAY_TABLE:
+      if (strcmp (name, SHNAME_DVP_OVERLAY_TABLE) !=0)
+  return false;
+      break;
+    case SHT_DVP_OVERLAY:
+      if (strncmp (name, SHNAME_DVP_OVERLAY_PREFIX,
+                   sizeof (SHNAME_DVP_OVERLAY_PREFIX) - 1) !=0)
+  return false;
+      break;
     default:
       break;
     }
@@ -7799,6 +7809,17 @@ _bfd_mips_elf_fake_sections (bfd *abfd, Elf_Internal_Shdr *hdr, asection *sec)
       hdr->sh_flags |= SHF_ALLOC;
       hdr->sh_entsize = get_elf_backend_data(abfd)->s->arch_size == 64 ? 0 : 4;
     }
+  else if (strcmp (name, SHNAME_DVP_OVERLAY_TABLE) == 0)
+    {
+      hdr->sh_type = SHT_DVP_OVERLAY_TABLE;
+      hdr->sh_entsize = sizeof (Elf32_Dvp_External_Overlay);
+      /* The sh_link field is set in final_write_processing.  */
+    }
+  else if (strcmp (name, SHNAME_DVP_OVERLAY_STRTAB) == 0)
+    hdr->sh_type = SHT_STRTAB;
+  else if (strncmp (name, SHNAME_DVP_OVERLAY_PREFIX,
+                    sizeof (SHNAME_DVP_OVERLAY_PREFIX) - 1) == 0)
+    hdr->sh_type = SHT_DVP_OVERLAY;
 
   /* The generic elf_fake_sections will set up REL_HDR using the default
    kind of relocations.  We used to set up a second header for the

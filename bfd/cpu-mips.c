@@ -96,6 +96,10 @@ enum
   I_mipsisa64r3,
   I_mipsisa64r5,
   I_mipsisa64r6,
+  I_dvp_dma,
+  I_dvp_vif,
+  I_dvp_vu,
+  I_dvp_gif,
   I_sb1,
   I_loongson_2e,
   I_loongson_2f,
@@ -165,7 +169,11 @@ static const bfd_arch_info_type arch_info_struct[] =
   N (32, 32, bfd_mach_mips_interaptiv_mr2, "mips:interaptiv-mr2", false,
      NN(I_interaptiv_mr2)),
   N (32, 32, bfd_mach_mips_allegrex, "mips:allegrex", false, NN(I_allegrex)),
-  N (64, 64, bfd_mach_mips_micromips, "mips:micromips", false, NULL)
+  N (64, 64, bfd_mach_mips_micromips, "mips:micromips", false, NULL),
+  N (32, 32, bfd_mach_dvp_dma, "dvp:dma",         false, NN(I_dvp_dma)),
+  N (32, 32, bfd_mach_dvp_vif, "dvp:vif",         false, NN(I_dvp_vif)),
+  N (32, 32, bfd_mach_dvp_vu, "dvp:vu",           false, NN(I_dvp_vu)),
+  N (32, 32, bfd_mach_dvp_gif, "dvp:gif",         false, NN(I_dvp_gif)),
 };
 
 /* The default architecture is mips:3000, but with a machine number of
