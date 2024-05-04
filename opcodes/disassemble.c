@@ -306,12 +306,16 @@ disassembler (enum bfd_architecture a,
       disassemble = print_insn_metag;
       break;
 #endif
-#ifdef ARCH_mips
+#if defined(ARCH_mips) || defined(ARCH_dvp)
     case bfd_arch_mips:
+#ifdef ARCH_mips
       if (big)
 	disassemble = print_insn_big_mips;
       else
 	disassemble = print_insn_little_mips;
+#else
+  disassemble = print_insn_dvp;
+#endif
       break;
 #endif
 #ifdef ARCH_mmix

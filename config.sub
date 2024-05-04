@@ -579,7 +579,7 @@ case $basic_machine in
 	| be32 | be64 \
 	| bfin \
 	| c4x | c8051 | clipper | csky \
-	| d10v | d30v | dlx | dsp16xx \
+	| d10v | d30v | dlx | dsp16xx | dvp \
 	| e2k | epiphany \
 	| fido | fr30 | frv | ft32 \
 	| h8300 | h8500 | hppa | hppa1.[01] | hppa2.0 | hppa2.0[nw] | hppa64 \
@@ -997,6 +997,10 @@ case $basic_machine in
 	*mint | mint[0-9]* | *MiNT | *MiNT[0-9]*)
 		basic_machine=m68k-atari
 		os=mint
+		;;
+	dvp)
+		basic_machine=dvp-scei
+		os=-elf
 		;;
 	mips3*-*)
 		basic_machine=`echo "$basic_machine" | sed -e 's/mips3/mips64/'`

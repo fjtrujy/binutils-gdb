@@ -994,6 +994,9 @@ case "${target}" in
   d30v-*-*)
     noconfigdirs="$noconfigdirs gdb"
     ;;
+  dvp-*-*)
+    noconfigdirs="$noconfigdirs ld gdb target-libgloss gprof sim"
+    ;;
   fr30-*-elf*)
     noconfigdirs="$noconfigdirs gdb"
     ;;
