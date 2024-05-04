@@ -1032,7 +1032,7 @@ fixup_segment (fixS *fixP, segT this_segment)
 	}
 
       if (!fixP->fx_done)
-	md_apply_fix (fixP, &add_number, this_segment);
+	md_apply_fix3 (fixP, &add_number, this_segment);
 
       if (!fixP->fx_done)
 	{
